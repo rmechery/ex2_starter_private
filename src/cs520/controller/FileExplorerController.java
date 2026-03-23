@@ -15,7 +15,8 @@ public class FileExplorerController
 	
 	public FileExplorerController() {
 		this.model = new FileExplorerModel();
-		this.view = new FileExplorerGUI();
+		this.view = new FileExplorerGUI(this.model);
+		this.model.addPropertyChangeListener(this.view);
 		
 		view.getAboutMenuItem().addActionListener(e -> {
 			view.showAboutDialog(model);
@@ -76,7 +77,7 @@ public class FileExplorerController
 
 	public void go(FileModel currentOpenFolder) {
 		this.model.go(currentOpenFolder);
-		this.view.update(this.model);
+		// this.view.update(this.model);
 	}
 	
 	public void openFolder() {
@@ -89,17 +90,17 @@ public class FileExplorerController
 	
 	public void refresh() {
 		// The model will load the folder on demand.
-		this.view.update(this.model);
+		this.view.update();
 	}
 	
 	public void closeFolder() {
 		this.model.go(null);
-		this.view.update(this.model);
+		// this.view.update(this.model);
 	}
 	
 	public void toggleShowHiddenResources() {
-		view.toggleShowHiddenResources();
-		view.update(model);
+		this.view.toggleShowHiddenResources();
+		// this.view.update(model);
 	}
 	
 	public void goEnclosingFolder() {
