@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html","k":"18"},{"l":"cs520"},{"l":"cs520.controller"},{"l":"cs520.model"},{"l":"cs520.view"}];updateSearchResults();
