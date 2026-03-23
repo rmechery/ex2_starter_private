@@ -1,6 +1,8 @@
 package cs520.view;
 
 import java.awt.BorderLayout;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -12,7 +14,7 @@ import javax.swing.JOptionPane;
 import cs520.model.FileExplorerModel;
 
 
-public class FileExplorerGUI extends JFrame 
+public class FileExplorerGUI extends JFrame implements PropertyChangeListener
 {
 	public static final String APP_TITLE = "File Explorer";
 	public static final String ABOUT_TITLE = "About";
@@ -32,8 +34,12 @@ public class FileExplorerGUI extends JFrame
 	private JMenuItem goDownloadsFolderMenuItem;
 	private FileExplorerHeaderView topPanel;
 	private FileExplorerListView centerPanel;
+
+	private FileExplorerModel model;
 	
-	public FileExplorerGUI() {
+	public FileExplorerGUI(FileExplorerModel model) {
+		this.model = model;
+
 		setTitle(APP_TITLE);
 		setSize(800, 600);
 		
@@ -150,12 +156,18 @@ public class FileExplorerGUI extends JFrame
 	public FileExplorerListView getFileExplorerFileListing() {
 		return this.centerPanel;
 	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent event) {
+		this.update();
+		event.getNewValue();
+	}
 	
-	public void update(FileExplorerModel model) {
+	public void update() {
 		// Update the "Go Enclosing Folder" menu item
-		if ((model != null) && (this.goEnclosingFolderMenuItem != null)) {
+		if ((this.model != null) && (this.goEnclosingFolderMenuItem != null)) {
 			boolean enabled;
-			if ((model.getCurrentOpenFolder() == null) || (model.getCurrentOpenFolder().getParent() == null)) {
+			if ((this.model.getCurrentOpenFolder() == null) || (this.model.getCurrentOpenFolder().getParent() == null)) {
 				enabled = false;
 			}
 			else {
@@ -164,8 +176,8 @@ public class FileExplorerGUI extends JFrame
 			this.goEnclosingFolderMenuItem.setEnabled(enabled);
 		}
 		// Update the top panel
-		this.topPanel.update(model);
+		this.topPanel.update(this.model);
 		// Update the center panel
-		this.centerPanel.update(model);
+		this.centerPanel.update(this.model);
 	}
 }

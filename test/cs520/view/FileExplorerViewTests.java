@@ -23,7 +23,7 @@ public class FileExplorerViewTests {
 	@BeforeEach
 	public void setUp() {
 		this.model = new FileExplorerModel();
-		this.gui = new FileExplorerGUI();
+		this.gui = new FileExplorerGUI(model);
 	}
 	
 	protected void testFileExplorerGUIHelper() {
@@ -40,7 +40,7 @@ public class FileExplorerViewTests {
 		this.testFileExplorerGUIHelper();
 		FileModel testFilesFolderModel = new FileModel("test_files");
 		this.model.go(testFilesFolderModel);
-		this.gui.update(this.model);
+		this.gui.update();
 		assertEquals(2, this.gui.getFileExplorerFileListing().getFileListingModel().getSize());
 	}
 	
@@ -48,7 +48,7 @@ public class FileExplorerViewTests {
 	public void testUpdateNotNull() {
 		this.testUpdateNotNullHelper();
 		this.model.go(null);
-		this.gui.update(this.model);
+		this.gui.update();
 		this.testFileExplorerGUIHelper();
 	}
 	

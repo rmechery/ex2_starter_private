@@ -1,8 +1,12 @@
 package cs520.model;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 public class FileExplorerModel 
 {
+	private final PropertyChangeSupport PCS = new PropertyChangeSupport(this);
+
 	public static final String DESKTOP_FOLDER_NAME = "Desktop";
 	public static final String DOCUMENTS_FOLDER_NAME = "Documents";
 	public static final String DOWNLOADS_FOLDER_NAME = "Downloads";
@@ -52,12 +56,27 @@ public class FileExplorerModel
 	public FileModel getCurrentOpenFolder() {
 		return this.currentOpenFolder;
 	}
+
+	public void setCurrentOpenFolder(FileModel newOpenFolder) {
+		FileModel oldOpenFolder = this.currentOpenFolder;
+		this.currentOpenFolder = newOpenFolder;
+		this.PCS.firePropertyChange("currentOpenFolder", oldOpenFolder, newOpenFolder);
+	}
+
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		this.PCS.addPropertyChangeListener(listener);
+	}
+
+	public void removePropertyChangeListener(PropertyChangeListener listener) {
+		this.PCS.removePropertyChangeListener(listener);
+	}
 	
 	public void go(FileModel currentOpenFolder) {
 		// Perform input validation
 		if ((currentOpenFolder != null) && (! currentOpenFolder.isDirectory())) {
 			throw new UnsupportedOperationException("Cannot go to file " + currentOpenFolder.getName());
 		}
-		this.currentOpenFolder = currentOpenFolder;
+		
+		this.setCurrentOpenFolder(currentOpenFolder);
 	}
 }
